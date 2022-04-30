@@ -38,16 +38,7 @@ kafka01> export SSLPASS=peterpass
 이제 준비가 완료되었다면 키스토어를 생성하자.  
 
 ```
-sudo keytool 
--keystore kafka.server.keystore.jks 
--alias localhost 
--keyalg RSA 
--validity 365 
--genkey 
--storepass $SSLPASS 
--keypass $SSLPASS 
--dname "CN=peter-kafka01.foo.bar" 
--storetype pkcs12
+sudo keytool -keystore kafka.server.keystore.jks -alias localhost -keyalg RSA -validity 365 -genkey -storepass $SSLPASS -keypass $SSLPASS -dname "CN=peter-kafka01.foo.bar" -storetype pkcs12
 ```
 
 |옵션이름|설명|
@@ -197,10 +188,17 @@ keytool -list -v -keystore kafka.server.truststore.jks
 키스토어에 저장된 모든 인증서들은 자체 서명된 CA의 서명을 받아야한다.   
 그렇게 해야만 클라이언트가 인증서 요청을 보냈을 때, 해당 인증서를 신뢰할 수 있기 때문이다.  
 
+```
+sudo keytool -keystore kafka.server.keystore.jks -alias localhost -certreq -file cert-file -storepass $SSLPASS -keypass $SSLPASS
+```
 
+<img width="750" alt="image" src="https://user-images.githubusercontent.com/50267433/166095074-4bebbbf9-0320-49d5-af41-6c1042feb5bd.png">
 
+cert-file 이 생성된 것을 확인했다면 자체 서명을 적용해보자.   
 
+```
 
+```
 
 
 
