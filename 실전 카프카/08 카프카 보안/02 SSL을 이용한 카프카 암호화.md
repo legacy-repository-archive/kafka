@@ -197,8 +197,48 @@ sudo keytool -keystore kafka.server.keystore.jks -alias localhost -certreq -file
 cert-file 이 생성된 것을 확인했다면 자체 서명을 적용해보자.   
 
 ```
-
+sudo openssl x509 -req -CA ca-cert -CAkey ca-key -in cert-file -out -cert-signed -days 365 -CAcreateserial -passin pass:$PASSWORD
+```
+```
+Signature ok
+subject=/CN=peter-kafka01.foo.bar
+Getting CA Private Key
 ```
 
+|옵션 이름|설명|
+|------|---|
+|x509|표준 인증서 번호|
+|req|인증서 서명 요청|
+|ca|인증서 파일|
+|cakey|프라이빗 키 파일|
+|in|인풋 파일|
+|out|아웃풋 파일|
+|days|dbgydlfwk|
+|passin|소스의 프라이빗 키 파일|
 
+출력 내용을 보면 서명이 완료되었음을 알 수 있다.   
+이제 마지막으로 키스토어에 자체 서명된 CA 인증서인 ca-cert와 서명된 cert-signed 를 추가하자.  
+
+```
+sudo keytool -keystore kafka.server.keystore.jks -alias CARoot -importcert -file ca-cert -storepass $SSLPASS -keypass $SSLPASS
+이 인증서를 신뢰합니까? [아니오]:  y
+인증서가 키 저장소에 추가되었습니다.
+```
+```
+sudo keytool -keystore kafka.server.keystore.jks -alias localhost -importcert -file -cert-signed -storepass $SSLPASS -keypass $SSLPASS
+인증서 회신이 키 저장소에 설치되었습니다. 
+```
+
+키스토어에 자체 서명된 CA 인증서를 추가했으니 내용을 확인해보자.  
+
+
+```
+keytool -list -v -keystore kafka.server.keystore.jks
+키 저장소 비밀번호 입력: peterpass 
+
+~~~~ 
+```
+출력 내용을 보면 최초로 키스토어를 생성했을 때의 결과와 달라진 것을 확인할 수 있다.  
+저장소에는 총 2개의 인증서가 저장되어있으며 자체 서명된 CA 인증서 내용이 포험되어 있음을 알 수 있다.    
+지금까지 수행한 작업들을 클러스터 내 다른 브로커에서도 동일하게 진행해야한다.     
 
