@@ -146,6 +146,56 @@ writing new private key to 'ca-key'
 하지만, 사설 인증서는 인증기관을 통해 발급 받은 인증서가 아니므로 서버에 접속한 클라이언트는 이 인증서를 신뢰할 수 없다.   
 **따라서 다음과 같이 생성한 자체 서명된 CA 인증서를 클라이언트가 신뢰할 수 있도록 트러스트스토어에 추가한다**    
 
+```shell
+sudo keytool -keystore kafka.server.truststore.jks -alias CARoot -importcert -file ca-cert -storepass $SSLPASS -keypass $SSLPASS
+이 인증서를 신뢰합니까? [아니오]:  y
+```
+
+|옵션 이름|설명|
+|------|---|
+|keytool|키스토어 이름|
+|alias|별칭|
+|importcert|인증서를 임포트|
+|file|인증서 파일|
+|storepass|저장소 비밀번호|
+|keypass|키 비밀번호|    
+
+트러스트 스토어가 생성되었다.  
+
+```shell
+keytool -list -v -keystore kafka.server.truststore.jks
+```
+```
+키 저장소 비밀번호 입력:
+키 저장소 유형: jks
+키 저장소 제공자: SUN
+
+키 저장소에 1개의 항목이 포함되어 있습니다.
+
+별칭 이름: caroot
+생성 날짜: 2022. 4. 30
+항목 유형: trustedCertEntry
+
+소유자: CN=foo.bar
+발행자: CN=foo.bar
+일련 번호: eab9c148b1289801
+적합한 시작 날짜: Sat Apr 30 15:14:55 KST 2022 종료 날짜: Fri Apr 21 15:14:55 KST 2023
+인증서 지문:
+	 MD5:  23:13:18:17:C7:00:22:89:35:AC:D1:99:38:14:A9:96:F1:B7:FE:8A
+	 SHA1: 5B:C6:A4:70:52:70:66:0D:2E:92:89:BB:E9:F7:00:B7:BA:44:0C:5F:A4:BB:2C:2E:87:64:15:37:DC:16:B9:E2
+	 SHA256: SHA256withRSA
+서명 알고리즘 이름: 2048비트 RSA 키
+주체 공용 키 알고리즘: 3
+버전: {10}
+~~ 생략 
+```  
+
+출력 내용을 보면 인증서 생성시 설정한 CN 정보와 유효 기간등이 잘 적용되었는지 확인한다.   
+
+## 인증서 서명 
+
+키스토어에 저장된 모든 인증서들은 자체 서명된 CA의 서명을 받아야한다.   
+그렇게 해야만 클라이언트가 인증서 요청을 보냈을 때, 해당 인증서를 신뢰할 수 있기 때문이다.  
 
 
 
