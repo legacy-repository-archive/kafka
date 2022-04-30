@@ -25,11 +25,30 @@ SSL을 설명하기에 키스토어와 트러스트스터오를 살펴보자.
 * 클라이언트 측면에서 서버가 제공하는 인증서를 검증하기 위한 퍼블릭 키와 서버와 SSL 연결에서 유효성을 검사하는 서명된 인증서를 저장한다.  
 * 민감한 정보는 저장하지 않는다.  
 
+```shell
+kafka01> sudo mkdir -p /usr/local/kafka/ssl
+kafka01> cd /usr/local/kafka/ssl/
+kafka01> export SSLPASS=peterpass
+```
 아제 SSL 적용에 필요한 파일들을 생성하기 전 모두 한 곳에 모아두기 위해 SSL 이라는 디렉토리를 먼저 만든다.   
 키스토어와 트러스트스토어 생성 시 비밀번호를 입력하는 경우가 많다.   
 따라서 반복적인 작업을 최소화하기 위해 비밀번호를 환경변수로 비밀 번호룰 한번만 등록한 후 재사용하자.   
 
- 
+비밀번호 변경도 가능하지만 되도록 변경하지 않는 방향으로 진행하자.   
+이제 준비가 완료되었다면 키스토어를 생성하자.  
+
+```
+sudo keytool 
+-keystore kafka.server.keystore.jks 
+-alias localhost 
+-keyalg RSA 
+-validity 365 
+-genkey 
+-storepass $SSLPASS 
+-keypass $SSLPASS 
+-dname "CN=peter-kafka01.foo.bar" 
+-storetype pkcs12
+```
 
 
 
