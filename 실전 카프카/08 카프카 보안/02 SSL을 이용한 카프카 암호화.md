@@ -50,6 +50,21 @@ sudo keytool
 -storetype pkcs12
 ```
 
+|옵션이름|설명|
+|-----|---|
+|keytool|키스토이 이름|
+|alias|별칭|
+|keyalg|키 알고리즘|
+|genkey|키 생성|
+|validity|유효일자|
+|storepass|저장소 비밀번호|
+|keypass|키 비밀번호|  
+|dname| 식별 이름|
+|stroetype|저장 타입|  
+
+
+
+
 
 
 
