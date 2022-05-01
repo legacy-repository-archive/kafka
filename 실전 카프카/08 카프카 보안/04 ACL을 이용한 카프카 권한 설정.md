@@ -57,6 +57,38 @@ unset KAFKA_OPTS
 
 [#](#)  
 
+전체적인 권할 설정사항은 위와 같이 진행될 예정이다.  
+ 
+* peter01 유저는 peter-test09 토픽에 대해 읽기와 쓰기 가능   
+* peter02 유저는 peter-test10 토픽에 대해 읽기와 쓰기 가능   
+* admin 유저는 peter-test09, peter-test10 토픽에 대해 읽기와 쓰기 가능   
+
+카프카에서 권한 설정을 위해 제공하는 kafka-acls.sh  명령어를 이용해     
+아래와 같이 peter01 유저에 대해 ACL 규칙을 제공한다.    
+
+```shell 
+/usr/local/kafka/bin/kafka-acls.sh  
+--authorizer-properties zookeeper.connect-peter-zk01.foo.bar:2181
+--add 
+--allow-principal User:peter01
+## --allow-host 127.0.0.1
+--operation Read
+--operation Write
+--opertaion DESCRIBE
+--topic peter-test09
+
+> 결과 출력됨 
+```
+
+출력 내용을 보면    
+peter01 에 대해 모든 호스트에서 토픽 peter-test09의 읽기와 쓰기 오퍼레이션이 승인됐다는 내용을 확인할 수 있다.    
+또한 규칙을 추가하지는 않았지만 허용할 특정 호스트를 필요에 따라 제어할 수 있다.  
+이 방식과 마찬가지로 peter02 에도 토픽 peter-test10 에 대한 권한을 부여하자.   
+
+
+
+
+
 
 
 
