@@ -119,3 +119,24 @@ peter-test09 message! 라는 메시지가 권한 오류 등의 문제 없이 잘
 에러 내용을 자세히 살펴보며는 `peter-topic10 에 권한이 없다.` 는 문구를 확인할 수 있다.      
 즉 peter01 유저는 peter-test10 토픽으로 메시지를 보낼 수 없습니다.   
 따라서 조금 전 적용한 ACL 규칙이 잘 적용됐음을 알 수 있다.   
+
+이제 peter10 유저를 콘솔 컨슈머로 peter-test09 토픽의 메시지를 읽어보겠습니다.    
+
+```shell
+/usr/local/kafka/bin/kafka-console-consumer.sh.   
+--bootstrap-server peter-kafka01.foo.bar:9094.  
+--topic peter-test09   
+--from-beginning.   
+--consumer.config kerberos.config
+```
+
+peter-test09 토픽에 peter01 유저의 권한 설정을 했으므로 메시지를 가져올 것이라고 예상했지만     
+예상과 달리 peter-test09 토픽의 메시지를 읽지 못했다.       
+출력 내용을 유심히 살펴보니 콘솔 컨슈머 그룹 네임인 console-consumer-54292 에 대한 접근 권한이 없다는 에러 메시지가 보인다.   
+  
+카프카에서는 리소스 타입으로 권한을 설정하도록 구분되어 있고,       
+컨슈머 그룹에 대한 권한 설정은 그룹 리소스 타입의 권한이 필요하다.  
+
+
+ㅇㅣ용해 peter01
+ㅇㅣ
