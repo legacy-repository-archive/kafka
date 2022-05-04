@@ -108,11 +108,14 @@ export KAFKA_OPTS="-Djava.security.auth.login.config=/home/ec2-user/kafka_client
 peter-test09 message! 라는 메시지가 권한 오류 등의 문제 없이 잘 전송되었다.      
 이번에는 ACL 규칙의 권한 설정을 확인해보기 위해 peter-test10 토픽으로 peter-test10 message! 라는 메시지를 전송해보자.   
 
+```
+/usr/local/kafka/bin/kafka-console-producer.sh.   
+--bootstrap-server peter-kafka01.foo.bar:9094   
+--topic peter-test10 --producer.config kerbreos.config
+> peter-test10 message!   
+```
 
-
-
-  
-
-
-
-
+메시지 전송을 하려고 엔터 키를 누르자마자 에러 메시지들이 뜬다.       
+에러 내용을 자세히 살펴보며는 `peter-topic10 에 권한이 없다.` 는 문구를 확인할 수 있다.      
+즉 peter01 유저는 peter-test10 토픽으로 메시지를 보낼 수 없습니다.   
+따라서 조금 전 적용한 ACL 규칙이 잘 적용됐음을 알 수 있다.   
