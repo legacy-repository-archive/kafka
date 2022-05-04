@@ -85,7 +85,15 @@ peter01 에 대해 모든 호스트에서 토픽 peter-test09의 읽기와 쓰�
 또한 규칙을 추가하지는 않았지만 허용할 특정 호스트를 필요에 따라 제어할 수 있다.  
 이 방식과 마찬가지로 peter02 에도 토픽 peter-test10 에 대한 권한을 부여하자.   
 
+```shell
+/usr/local/kafka/bin/kafka-acls.sh    
+--authorizer-properties zookeeper.connect=peter-zk01.foo.bar:2181    
+--list
+```
 
+현재 적용되어 있는 ACL 규칙의 리스트는 다음과 같이 --list 파라미터를 추가해 확인할 수 있다.      
+ACL 정책이 잘 적용되었다면 이제 다음과 같이 peter01 유저의 티켓을 발급받은 후      
+콘솔 프로듀서를 이용해 peter-test09 토픽에게 peter-test09 message!라는 메시지를 전송해보자.  
 
 
 
