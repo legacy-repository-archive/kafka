@@ -95,7 +95,18 @@ peter01 에 대해 모든 호스트에서 토픽 peter-test09의 읽기와 쓰�
 ACL 정책이 잘 적용되었다면 이제 다음과 같이 peter01 유저의 티켓을 발급받은 후      
 콘솔 프로듀서를 이용해 peter-test09 토픽에게 peter-test09 message!라는 메시지를 전송해보자.  
 
-
+```shell
+kinit -kt /usr/local/kafka/keytabs/peter01.user.keytab.peter01
+export KAFKA_OPTS="-Djava.security.auth.login.config=/home/ec2-user/kafka_client_jaas.conf"     
+/usr/local/kafka/bin/kafka-console-producer.sh     
+--boostrap-server peter-kafka01.foo.bar:9094.  
+--topic peter-test10   
+--producer.config kerberos.config
+> peter-test10 message!
+```     
+   
+peter-test09 message! 라는 메시지가 권한 오류 등의 문제 없이 잘 전송되었다.      
+이번에는 ACL 규칙의 권한 설정을 확인해보기 위해 peter-test10 토픽으로 peter-test10 message! 라는 메시지를 전송해보자.   
 
 
 
